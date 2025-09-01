@@ -5,21 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>StyleCart</title>
   <style>
-    /* Background Animation */
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #f0f0f5, #e0eaff);
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb);
       background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
+      animation: gradientMove 15s ease infinite;
       color: #333;
     }
-    @keyframes gradientBG {
+    @keyframes gradientMove {
       0% {background-position: 0% 50%;}
       50% {background-position: 100% 50%;}
       100% {background-position: 0% 50%;}
     }
-
     header {
       background: #222;
       color: white;
@@ -36,7 +34,6 @@
       margin: 0;
       font-weight: bold;
     }
-
     .container {
       max-width: 1000px;
       margin: 30px auto;
@@ -45,44 +42,38 @@
       border-radius: 10px;
       box-shadow: 0 0 15px rgba(0,0,0,0.1);
     }
-
     .product {
       display: flex;
+      flex-wrap: wrap;
       gap: 30px;
       margin-bottom: 40px;
       align-items: center;
       transition: transform 0.3s ease;
     }
-
     .product:hover {
       transform: scale(1.02);
     }
-
     .product img {
       max-width: 300px;
       border-radius: 10px;
       transition: transform 0.3s ease;
     }
-
     .product img:hover {
       transform: rotate(-2deg) scale(1.05);
     }
-
     .details {
       flex: 1;
+      min-width: 250px;
     }
-
     .details h2 {
       font-size: 28px;
       margin-bottom: 10px;
       font-weight: bold;
     }
-
     .details p {
       margin: 5px 0;
       font-size: 16px;
     }
-
     .details input, .details select {
       margin-top: 10px;
       padding: 10px;
@@ -91,7 +82,6 @@
       border: 1px solid #ccc;
       border-radius: 5px;
     }
-
     .details button {
       margin-top: 20px;
       padding: 12px;
@@ -102,31 +92,41 @@
       cursor: pointer;
       border-radius: 5px;
     }
-
     .details button:hover {
       background: #0056b3;
     }
-
     .rating {
       margin-top: 10px;
     }
-
     .star {
       font-size: 24px;
       color: #ccc;
       cursor: pointer;
     }
-
     .star.selected {
       color: gold;
     }
-
-    .hoverboard h2 {
-      font-size: 32px;
-      color: #ff4081;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 2px;
+    #cart {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f8f8f8;
+      border-radius: 10px;
+    }
+    #cart ul {
+      list-style: none;
+      padding: 0;
+    }
+    #cart li {
+      margin-bottom: 10px;
+    }
+    @media (max-width: 768px) {
+      .product {
+        flex-direction: column;
+        align-items: center;
+      }
+      .details {
+        text-align: center;
+      }
     }
   </style>
 </head>
@@ -146,9 +146,7 @@
       <h2>Classic Cotton Shirt</h2>
       <p><strong>Price:</strong> ₹799</p>
       <p><strong>Category:</strong> Men's Wear</p>
-      <label>Customize Print:</label>
-      <input type="text" id="shirtPrint" placeholder="Enter your print text" />
-      <label>Size:</label>
+      <input type="text" id="shirtPrint" placeholder="Custom Print Text" />
       <select id="shirtSize">
         <option>Small</option>
         <option>Medium</option>
@@ -162,20 +160,18 @@
         <span class="star" onclick="rate(this)">★</span>
         <span class="star" onclick="rate(this)">★</span>
       </div>
-      <button onclick="addToCart('shirt')">Add to Cart</button>
+      <button onclick="addToCart('Classic Cotton Shirt', 799)">Add to Cart</button>
     </div>
   </div>
 
   <!-- Hoverboard Product -->
-  <div class="product hoverboard">
+  <div class="product">
     <img src="https://images.unsplash.com/photo-1606813909357-5e3b0f3c3c6f?auto=format&fit=crop&w=500&q=80" alt="Hoverboard" />
     <div class="details">
       <h2>Neon Hoverboard</h2>
       <p><strong>Price:</strong> ₹12,499</p>
       <p><strong>Category:</strong> Gadgets</p>
-      <label>Customize Print:</label>
-      <input type="text" id="hoverPrint" placeholder="Enter your print text" />
-      <label>Color:</label>
+      <input type="text" id="hoverPrint" placeholder="Custom Print Text" />
       <select id="hoverColor">
         <option>Black</option>
         <option>Neon Blue</option>
@@ -189,24 +185,36 @@
         <span class="star" onclick="rate(this)">★</span>
         <span class="star" onclick="rate(this)">★</span>
       </div>
-      <button onclick="addToCart('hoverboard')">Add to Cart</button>
+      <button onclick="addToCart('Neon Hoverboard', 12499)">Add to Cart</button>
     </div>
+  </div>
+
+  <!-- Cart Section -->
+  <div id="cart">
+    <h2>Your Cart</h2>
+    <ul id="cart-items"></ul>
+    <button onclick="checkout()">Checkout</button>
   </div>
 
 </div>
 
 <script>
-  function addToCart(product) {
-    let printText = '';
-    let option = '';
-    if (product === 'shirt') {
-      printText = document.getElementById('shirtPrint').value;
-      option = document.getElementById('shirtSize').value;
-    } else {
-      printText = document.getElementById('hoverPrint').value;
-      option = document.getElementById('hoverColor').value;
-    }
-    alert(`Added to cart:\nProduct: ${product}\nOption: ${option}\nCustom Print: ${printText || 'None'}`);
+  const cart = [];
+
+  function addToCart(name, price) {
+    cart.push({ name, price });
+    updateCartUI();
+  }
+
+  function updateCartUI() {
+    const cartList = document.getElementById('cart-items');
+    cartList.innerHTML = cart.map(item => `<li>${item.name} - ₹${item.price}</li>`).join('');
+  }
+
+  function checkout() {
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    alert(`Total: ₹${total}\nProceeding to payment...`);
+    // Razorpay integration would go here
   }
 
   function rate(star) {
