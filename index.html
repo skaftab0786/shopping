@@ -3,233 +3,219 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>StyleCart</title>
+  <title>ShopEase</title>
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb);
-      background-size: 400% 400%;
-      animation: gradientMove 15s ease infinite;
-      color: #333;
-    }
-    @keyframes gradientMove {
-      0% {background-position: 0% 50%;}
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
     }
     header {
-      background: #222;
-      color: white;
-      padding: 15px 30px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-    }
-    header img {
-      height: 40px;
-    }
-    .dynamic-island {
-      position: fixed;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: black;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 30px;
-      font-size: 14px;
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0% {opacity: 0.8;}
-      50% {opacity: 1;}
-      100% {opacity: 0.8;}
-    }
-    .container {
-      max-width: 1000px;
-      margin: 30px auto;
-      padding: 20px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    }
-    .product {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 30px;
-      margin-bottom: 40px;
       align-items: center;
+      padding: 1rem;
+      background-color: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    #cart-icon {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: #000;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    #product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .product-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       transition: transform 0.3s ease;
     }
-    .product:hover {
-      transform: scale(1.02);
+    .product-card:hover {
+      transform: scale(1.03);
     }
-    .product img {
-      max-width: 300px;
-      border-radius: 10px;
-      transition: transform 0.3s ease;
+    #cart-page, #checkout-page {
+      padding: 1rem;
+      background: #fff;
+      display: none;
     }
-    .product img:hover {
-      transform: rotate(-2deg) scale(1.05);
-    }
-    .details {
-      flex: 1;
-      min-width: 250px;
-    }
-    .details h2 {
-      font-size: 28px;
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
-    .details p {
-      margin: 5px 0;
-      font-size: 16px;
-    }
-    .details input, .details select {
-      margin-top: 10px;
-      padding: 10px;
+    .hidden { display: none; }
+    .promo-video {
       width: 100%;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      height: 200px;
+      object-fit: cover;
+      margin-bottom: 1rem;
     }
-    .details button {
-      margin-top: 20px;
-      padding: 12px;
-      background: #007bff;
-      color: white;
+    .filters, .menu {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      padding: 1rem;
+    }
+    .menu button, .filters select {
+      padding: 0.5rem;
+      border-radius: 5px;
       border: none;
-      font-size: 16px;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-    .details button:hover {
-      background: #0056b3;
-    }
-    .rating {
-      margin-top: 10px;
-    }
-    .star {
-      font-size: 24px;
-      color: #ccc;
       cursor: pointer;
     }
-    .star.selected {
-      color: gold;
-    }
-    #cart {
-      margin-top: 30px;
-      padding: 20px;
-      background: #f8f8f8;
+    .touch-button {
+      padding: 0.75rem;
+      font-size: 1rem;
       border-radius: 10px;
-    }
-    #cart ul {
-      list-style: none;
-      padding: 0;
-    }
-    #cart li {
-      margin-bottom: 10px;
-    }
-    video.poster {
-      width: 100%;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-    @media (max-width: 768px) {
-      .product {
-        flex-direction: column;
-        align-items: center;
-      }
-      .details {
-        text-align: center;
-      }
+      background: #000;
+      color: #fff;
+      border: none;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>StyleCart</h1>
-  <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="App Logo" />
+  <h1>🛍️ ShopEase</h1>
+  <div class="menu">
+    <button onclick="toggleWishlist()">❤️ Wishlist</button>
+    <button onclick="showCart()">🛒 Cart</button>
+  </div>
 </header>
 
-<div class="dynamic-island">🛍️ 2 items in cart • ₹13,298</div>
-
-<video class="poster" autoplay muted loop>
-  <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+<video class="promo-video" autoplay muted loop>
+  <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
 </video>
 
-<div class="container">
-
-  <!-- Shirt Product -->
-  <div class="product">
-    <img src="https://images.unsplash.com/photo-1602810318383-7b7c1e4b8b8e?auto=format&fit=crop&w=500&q=80" alt="Shirt" />
-    <div class="details">
-      <h2>Classic Cotton Shirt</h2>
-      <p><strong>Price:</strong> ₹799</p>
-      <p><strong>Category:</strong> Men's Wear</p>
-      <input type="text" id="shirtPrint" placeholder="Custom Print Text" />
-      <select id="shirtSize">
-        <option>Small</option>
-        <option>Medium</option>
-        <option>Large</option>
-        <option>XL</option>
-      </select>
-      <div class="rating" id="shirtRating">
-        <span class="star" onclick="rate(this)">★</span>
-        <span class="star" onclick="rate(this)">★</span>
-        <span class="star" onclick="rate(this)">★</span>
-        <span class="star" onclick="rate(this)">★</span>
-        <span class="star" onclick="rate(this)">★</span>
-      </div>
-      <button onclick="addToCart('Classic Cotton Shirt', 799)">Add to Cart</button>
-    </div>
-  </div>
-
-  <!-- Hoverboard Product -->
-  <div class="product">
-    <img src="https://images.unsplash.com/photo-1606813909357-5e3b0f3c3c6f?auto=format&fit=crop&w=500&q=80" alt="Hoverboard" />
-    <div class="details">
-      <h2>Neon Hoverboard</h2>
-      <p><strong>Price:</strong> ₹12,499</p>
-      <p><strong>Category:</strong> Gadgets</p>
-      <input type="text" id="hoverPrint" placeholder="Custom Print Text" />
-      <select id="hoverColor">
-        <option>Black</option>
-        <option>Neon Blue</option>
-        <option>Hot Pink</option>
-        <option>Galaxy</option>
-      </select>
-      <div class="rating" id="hoverRating">
-        <span class="star" onclick="rate(this)">★</span>
-        <span class="star" onclick="rate(this)">★</span>
-        <span class="star" onclick="rate(this)">★</span>
-        <span class="star" onclick="rate(this)">★</span>
-        <span class="star" onclick="rate(this)">★</span>
-      </div>
-      <button onclick="addToCart('Neon Hoverboard', 12499)">Add to Cart</button>
-    </div>
-  </div>
-
-  <!-- Cart Section -->
-  <div id="cart">
-    <h2>Your Cart</h2>
-    <ul id="cart-items"></ul>
-    <button onclick="checkout()">Checkout</button>
-  </div>
-
+<div class="filters">
+  <select onchange="filterCategory(this.value)">
+    <option value="">All Categories</option>
+    <option value="Men">Men</option>
+    <option value="Women">Women</option>
+    <option value="Gadgets">Gadgets</option>
+  </select>
+  <select onchange="filterRating(this.value)">
+    <option value="">All Ratings</option>
+    <option value="5">⭐⭐⭐⭐⭐</option>
+    <option value="4">⭐⭐⭐⭐</option>
+    <option value="3">⭐⭐⭐</option>
+  </select>
 </div>
 
-<script>
-  const cart = [];
+<main id="product-grid"></main>
 
-  function addToCart(name, price) {
-    cart.push({ name, price });
-    updateCartUI();
+<div id="cart-icon" onclick="showCart()">🛒 <span id="cart-count">0</span></div>
+
+<section id="cart-page">
+  <h2>Your Cart</h2>
+  <ul id="cart-items"></ul>
+  <p>Total: ₹<span id="total-price">0</span></p>
+  <button class="touch-button" onclick="showCheckout()">Proceed to Checkout</button>
+</section>
+
+<section id="checkout-page">
+  <h2>Checkout</h2>
+  <input type="text" placeholder="Address" id="address" /><br/><br/>
+  <input type="text" placeholder="Contact" id="contact" /><br/><br/>
+  <button class="touch-button" onclick="placeOrder()">Place Order</button>
+</section>
+
+<script>
+  const products = [
+    { id: 1, title: "Men's Shirt", price: 999, category: "Men", rating: 4, image: "https://via.placeholder.com/250?text=Shirt" },
+    { id: 2, title: "Women's Pant", price: 1299, category: "Women", rating: 5, image: "https://via.placeholder.com/250?text=Pant" },
+    { id: 3, title: "Smartwatch", price: 4999, category: "Gadgets", rating: 5, image: "https://via.placeholder.com/250?text=Watch" }
+  ];
+  let cart = [];
+  let wishlist = [];
+
+  function renderProducts(list = products) {
+    const grid = document.getElementById("product-grid");
+    grid.innerHTML = "";
+    list.forEach(p => {
+      const card = document.createElement("div");
+      card.className = "product-card";
+      card.innerHTML = `
+        <img src="${p.image}" alt="${p.title}" width="100%" />
+        <h3>${p.title}</h3>
+        <p>₹${p.price}</p>
+        <p>Category: ${p.category}</p>
+        <p>Rating: ${"⭐".repeat(p.rating)}</p>
+        <input type="text" placeholder="Custom print?" />
+        <button onclick="addToCart(${p.id})">Add to Cart</button>
+        <button onclick="toggleWishlist(${p.id})">❤️</button>
+      `;
+      grid.appendChild(card);
+    });
   }
 
-  function updateCartUI() {
-    const cartList = document.getElementById('cart-items');
-    cartList.innerHTML = cart.map(item => `<li>${item.name} - ₹${item.price}</li>`).join('');
-    document.querySelector('.dynamic-island').textContent = `🛍️ ${cart.length} items in cart
+  function addToCart(id) {
+    const product = products.find(p => p.id === id);
+    const existing = cart.find(item => item.id === id);
+    if (existing) existing.qty += 1;
+    else cart.push({ ...product, qty: 1 });
+    updateCart();
+  }
+
+  function updateCart() {
+    document.getElementById("cart-count").textContent = cart.reduce((a, b) => a + b.qty, 0);
+  }
+
+  function showCart() {
+    const cartPage = document.getElementById("cart-page");
+    const items = document.getElementById("cart-items");
+    const total = document.getElementById("total-price");
+    items.innerHTML = "";
+    let sum = 0;
+    cart.forEach(item => {
+      sum += item.price * item.qty;
+      const li = document.createElement("li");
+      li.innerHTML = `
+        ${item.title} - ₹${item.price} x ${item.qty}
+        <button onclick="changeQty(${item.id}, 1)">+</button>
+        <button onclick="changeQty(${item.id}, -1)">-</button>
+        <button onclick="removeItem(${item.id})">Remove</button>
+      `;
+      items.appendChild(li);
+    });
+    total.textContent = sum;
+    cartPage.style.display = "block";
+    document.getElementById("checkout-page").style.display = "none";
+  }
+
+  function changeQty(id, delta) {
+    const item = cart.find(i => i.id === id);
+    item.qty += delta;
+    if (item.qty <= 0) removeItem(id);
+    updateCart();
+    showCart();
+  }
+
+  function removeItem(id) {
+    cart = cart.filter(i => i.id !== id);
+    updateCart();
+    showCart();
+  }
+
+  function showCheckout() {
+    document.getElementById("checkout-page").style.display = "block";
+    document.getElementById("cart-page").style.display = "none";
+  }
+
+  function placeOrder() {
+    const address = document.getElementById("address").value;
+    const contact = document.getElementById("contact").value;
+    alert(`Order placed!\nAddress: ${address}\nContact: ${contact}`);
+    cart = [];
+    updateCart();
+    document.getElementById("checkout-page").style.display = "none";
+  }
+
