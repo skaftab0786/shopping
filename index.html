@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>StyleCart</title>
   <style>
-    /* Animated Gradient Background */
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
@@ -30,10 +29,22 @@
     header img {
       height: 40px;
     }
-    header h1 {
-      font-size: 24px;
-      margin: 0;
-      font-weight: bold;
+    .dynamic-island {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: black;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 14px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% {opacity: 0.8;}
+      50% {opacity: 1;}
+      100% {opacity: 0.8;}
     }
     .container {
       max-width: 1000px;
@@ -120,6 +131,11 @@
     #cart li {
       margin-bottom: 10px;
     }
+    video.poster {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
     @media (max-width: 768px) {
       .product {
         flex-direction: column;
@@ -137,6 +153,12 @@
   <h1>StyleCart</h1>
   <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="App Logo" />
 </header>
+
+<div class="dynamic-island">🛍️ 2 items in cart • ₹13,298</div>
+
+<video class="poster" autoplay muted loop>
+  <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+</video>
 
 <div class="container">
 
@@ -210,21 +232,4 @@
   function updateCartUI() {
     const cartList = document.getElementById('cart-items');
     cartList.innerHTML = cart.map(item => `<li>${item.name} - ₹${item.price}</li>`).join('');
-  }
-
-  function checkout() {
-    const total = cart.reduce((sum, item) => sum + item.price, 0);
-    alert(`Total: ₹${total}\nProceeding to payment...`);
-    // Simulated checkout — real payment integration requires backend
-  }
-
-  function rate(star) {
-    const stars = star.parentElement.querySelectorAll('.star');
-    stars.forEach((s, i) => {
-      s.classList.toggle('selected', i <= Array.from(stars).indexOf(star));
-    });
-  }
-</script>
-
-</body>
-</html>
+    document.querySelector('.dynamic-island').textContent = `🛍️ ${cart.length} items in cart
