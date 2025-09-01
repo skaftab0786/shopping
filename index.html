@@ -3,46 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ShopEase</title>
+  <title>Product Listing</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #a1c4fd);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-    }
-    @keyframes gradientBG {
-      0% {background-position: 0% 50%;}
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
-    }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
       padding: 1rem;
-      background-color: #fff;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
     }
-    #cart-icon {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      background: #000;
-      color: #fff;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      cursor: pointer;
-      z-index: 1001;
+    h1 {
+      text-align: center;
     }
-    #product-grid {
+    .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 1rem;
-      padding: 1rem;
+      margin-top: 1rem;
     }
     .product-card {
       background: #fff;
@@ -54,175 +30,68 @@
     .product-card:hover {
       transform: scale(1.03);
     }
-    #cart-page, #checkout-page {
-      padding: 1rem;
-      background: #fff;
-      display: none;
-    }
-    .promo-video {
+    .product-card img {
       width: 100%;
-      height: 200px;
-      object-fit: cover;
-      margin-bottom: 1rem;
-    }
-    .filters {
-      padding: 1rem;
-    }
-    .filters button {
-      background: #000;
-      color: #fff;
-      padding: 0.5rem;
-      border: none;
       border-radius: 5px;
-      cursor: pointer;
     }
-    .filter-options {
-      display: none;
-      margin-top: 1rem;
+    .product-info {
+      margin-top: 0.5rem;
     }
-    .filter-options select {
-      margin-right: 1rem;
-      padding: 0.5rem;
-      border-radius: 5px;
-      border: 1px solid #ccc;
+    .product-info h3 {
+      margin: 0.5rem 0;
     }
-    .touch-button {
-      padding: 0.75rem;
-      font-size: 1rem;
-      border-radius: 10px;
-      background: #000;
-      color: #fff;
-      border: none;
-      cursor: pointer;
+    .rating {
+      color: gold;
     }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>🛍️ ShopEase</h1>
-  <div>
-    <button onclick="toggleWishlist()">❤️ Wishlist</button>
-    <button onclick="showCart()">🛒 Cart</button>
-  </div>
-</header>
-
-<video class="promo-video" autoplay muted loop>
-  <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-</video>
-
-<div class="filters">
-  <button onclick="toggleFilters()">🔍 Filters</button>
-  <div class="filter-options" id="filter-options">
-    <select onchange="filterCategory(this.value)">
-      <option value="">All Categories</option>
-      <option value="Men">Men</option>
-      <option value="Women">Women</option>
-      <option value="Gadgets">Gadgets</option>
-    </select>
-    <select onchange="filterRating(this.value)">
-      <option value="">All Ratings</option>
-      <option value="5">⭐⭐⭐⭐⭐</option>
-      <option value="4">⭐⭐⭐⭐</option>
-      <option value="3">⭐⭐⭐</option>
-    </select>
-  </div>
-</div>
-
-<main id="product-grid"></main>
-
-<div id="cart-icon" onclick="showCart()">🛒 <span id="cart-count">0</span></div>
-
-<section id="cart-page">
-  <h2>Your Cart</h2>
-  <ul id="cart-items"></ul>
-  <p>Total: ₹<span id="total-price">0</span></p>
-  <button class="touch-button" onclick="showCheckout()">Proceed to Checkout</button>
-</section>
-
-<section id="checkout-page">
-  <h2>Checkout</h2>
-  <input type="text" placeholder="Address" id="address" /><br/><br/>
-  <input type="text" placeholder="Contact" id="contact" /><br/><br/>
-  <button class="touch-button" onclick="placeOrder()">Place Order</button>
-</section>
+<h1>🛍️ Product Listing</h1>
+<div class="product-grid" id="productGrid"></div>
 
 <script>
   const products = [
-    { id: 1, title: "Men's Shirt", price: 999, category: "Men", rating: 4, image: "https://via.placeholder.com/250?text=Shirt" },
-    { id: 2, title: "Women's Pant", price: 1299, category: "Women", rating: 5, image: "https://via.placeholder.com/250?text=Pant" },
-    { id: 3, title: "Smartwatch", price: 4999, category: "Gadgets", rating: 5, image: "https://via.placeholder.com/250?text=Watch" }
+    {
+      title: "Men's Shirt",
+      price: 999,
+      category: "Men",
+      rating: 4,
+      image: "https://via.placeholder.com/250x250?text=Shirt"
+    },
+    {
+      title: "Women's Pant",
+      price: 1299,
+      category: "Women",
+      rating: 5,
+      image: "https://via.placeholder.com/250x250?text=Pant"
+    },
+    {
+      title: "Smartwatch",
+      price: 4999,
+      category: "Gadgets",
+      rating: 5,
+      image: "https://via.placeholder.com/250x250?text=Watch"
+    }
   ];
-  let cart = [];
-  let wishlist = [];
 
-  function renderProducts(list = products) {
-    const grid = document.getElementById("product-grid");
-    grid.innerHTML = "";
-    list.forEach(p => {
-      const card = document.createElement("div");
-      card.className = "product-card";
-      card.innerHTML = `
-        <img src="${p.image}" alt="${p.title}" width="100%" />
-        <h3>${p.title}</h3>
-        <p>₹${p.price}</p>
-        <p>Category: ${p.category}</p>
-        <p>Rating: ${"⭐".repeat(p.rating)}</p>
-        <input type="text" placeholder="Custom print?" />
-        <button onclick="addToCart(${p.id})">Add to Cart</button>
-        <button onclick="toggleWishlist(${p.id})">❤️</button>
-      `;
-      grid.appendChild(card);
-    });
-  }
+  const grid = document.getElementById("productGrid");
 
-  function addToCart(id) {
-    const product = products.find(p => p.id === id);
-    const existing = cart.find(item => item.id === id);
-    if (existing) existing.qty += 1;
-    else cart.push({ ...product, qty: 1 });
-    updateCart();
-  }
+  products.forEach(product => {
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.innerHTML = `
+      <img src="${product.image}" alt="${product.title}" />
+      <div class="product-info">
+        <h3>${product.title}</h3>
+        <p>Price: ₹${product.price}</p>
+        <p>Category: ${product.category}</p>
+        <p class="rating">Rating: ${"⭐".repeat(product.rating)}</p>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+</script>
 
-  function updateCart() {
-    document.getElementById("cart-count").textContent = cart.reduce((a, b) => a + b.qty, 0);
-  }
-
-  function showCart() {
-    const cartPage = document.getElementById("cart-page");
-    const items = document.getElementById("cart-items");
-    const total = document.getElementById("total-price");
-    items.innerHTML = "";
-    let sum = 0;
-    cart.forEach(item => {
-      sum += item.price * item.qty;
-      const li = document.createElement("li");
-      li.innerHTML = `
-        ${item.title} - ₹${item.price} x ${item.qty}
-        <button onclick="changeQty(${item.id}, 1)">+</button>
-        <button onclick="changeQty(${item.id}, -1)">-</button>
-        <button onclick="removeItem(${item.id})">Remove</button>
-      `;
-      items.appendChild(li);
-    });
-    total.textContent = sum;
-    cartPage.style.display = "block";
-    document.getElementById("checkout-page").style.display = "none";
-  }
-
-  function changeQty(id, delta) {
-    const item = cart.find(i => i.id === id);
-    item.qty += delta;
-    if (item.qty <= 0) removeItem(id);
-    updateCart();
-    showCart();
-  }
-
-  function removeItem(id) {
-    cart = cart.filter(i => i.id !== id);
-    updateCart();
-    showCart();
-  }
-
-  function showCheckout() {
-    document.getElement
+</body>
+</html>
