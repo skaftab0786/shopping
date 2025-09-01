@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>StyleCart</title>
   <style>
+    /* Animated Gradient Background */
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
@@ -214,7 +215,7 @@
   function checkout() {
     const total = cart.reduce((sum, item) => sum + item.price, 0);
     alert(`Total: ₹${total}\nProceeding to payment...`);
-    // Razorpay integration would go here
+    // Simulated checkout — real payment integration requires backend
   }
 
   function rate(star) {
